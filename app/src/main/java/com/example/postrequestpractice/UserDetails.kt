@@ -8,10 +8,12 @@ class Users {
 
         var name: String? = null
         var location: String? = null
+        var pk :Int?=null
 
-        constructor(name: String?, location: String?) {
+        constructor(name: String?, location: String?,pk :Int?) {
             this.name = name
             this.location = location
+            this.pk=pk
         }
     }
 }

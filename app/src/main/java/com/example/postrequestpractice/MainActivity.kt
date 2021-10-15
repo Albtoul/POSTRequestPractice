@@ -6,16 +6,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var recycler : RecyclerView
+    private lateinit var post: ArrayList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        recycler=findViewById(R.id.RV)
+        post= ArrayList()
+        recycler.adapter=RV(post)
+        recycler.layoutManager = LinearLayoutManager(this)
+
         val responseText = findViewById<View>(R.id.textView) as TextView
         val apiInterface = APIClient().getClient()?.create(APIInterface::class.java)
         val progressDialog = ProgressDialog(this@MainActivity)
@@ -30,8 +40,13 @@ class MainActivity : AppCompatActivity() {
                     var stringToBePritined:String? = "";
                     for(User in response.body()!!){
                         stringToBePritined = stringToBePritined +User.name+ "\n"+User.location + "\n"+"\n"
+                        post.add("$stringToBePritined")
                     }
                     responseText.text= stringToBePritined
+
+
+                    recycler.adapter?.notifyDataSetChanged()
+                    recycler.scrollToPosition(post.size -1)
                 }
                 override fun onFailure(call: Call<List<Users.UserDetails>>, t: Throwable) {
                     //  onResult(null)
@@ -45,6 +60,11 @@ class MainActivity : AppCompatActivity() {
 
     fun addnew(view: android.view.View) {
         intent = Intent(applicationContext, MainActivity2::class.java)
+        startActivity(intent)
+    }
+
+   fun delupdate(view: android.view.View) {
+        intent = Intent(applicationContext, MainActivity3::class.java)
         startActivity(intent)
     }
 }

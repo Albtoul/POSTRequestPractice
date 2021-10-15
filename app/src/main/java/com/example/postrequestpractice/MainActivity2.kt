@@ -13,6 +13,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity2 : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
@@ -23,43 +25,46 @@ class MainActivity2 : AppCompatActivity() {
 
         savebtn.setOnClickListener {
 
-            var f = Users.UserDetails(name.text.toString(), location.text.toString())
+            var f = Users.UserDetails(name.text.toString(), location.text.toString(),0)
 
-            addSingleuser(f, onResult = {
-                name.setText("")
-                location.setText("")
-                Toast.makeText(applicationContext, "Save Success!", Toast.LENGTH_SHORT).show();
-            })
+            addSingleuser(f)
         }
     }
 
-    private fun addSingleuser(f: Users.UserDetails, onResult: () -> Unit) {
 
-        val apiInterface = APIClient().getClient()?.create(APIInterface::class.java)
-        val progressDialog = ProgressDialog(this@MainActivity2)
-        progressDialog.setMessage("Please wait")
-        progressDialog.show()
 
-        if (apiInterface != null) {
-            apiInterface.addUser(f).enqueue(object : Callback<Users.UserDetails> {
-                override fun onResponse(
-                    call: Call<Users.UserDetails>,
-                    response: Response<Users.UserDetails>
-                ) {
+      private fun addSingleuser(f: Users.UserDetails) {
 
-                    onResult()
-                    progressDialog.dismiss()
-                }
+          val apiInterface = APIClient().getClient()?.create(APIInterface::class.java)
+          val progressDialog = ProgressDialog(this@MainActivity2)
+          progressDialog.setMessage("Please wait")
+          progressDialog.show()
 
-                override fun onFailure(call: Call<Users.UserDetails>, t: Throwable) {
-                    onResult()
-                    Toast.makeText(applicationContext, "Error!", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss()
+          if (apiInterface != null) {
+              apiInterface.addUser(f).enqueue(object : Callback<Users.UserDetails> {
+                  override fun onResponse(
+                      call: Call<Users.UserDetails>,
+                      response: Response<Users.UserDetails>
+                  ) {
+                      progressDialog.dismiss()
+                  }
 
-                }
-            })
+                  override fun onFailure(call: Call<Users.UserDetails>, t: Throwable) {
+
+                      Toast.makeText(applicationContext, "Error!", Toast.LENGTH_SHORT).show();
+                      progressDialog.dismiss()
+
+                  }
+              })
         }
+
+
+
     }
+
+
+
+
 
     fun addnew(view: android.view.View) {
         intent = Intent(applicationContext, MainActivity2::class.java)
@@ -70,4 +75,7 @@ class MainActivity2 : AppCompatActivity() {
         intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
     }
+
+
+
 }

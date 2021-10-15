@@ -1,10 +1,12 @@
 package com.example.postrequestpractice
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class APIClient {
+class APIClient() {
     private var retrofit: Retrofit? = null
 
     fun getClient(): Retrofit? {
@@ -18,4 +20,5 @@ class APIClient {
             .build()
         return retrofit
     }
+
 }
